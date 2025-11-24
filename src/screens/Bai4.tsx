@@ -14,10 +14,9 @@ import {
   Platform,
   UIManager,
   KeyboardAvoidingView,
-  ActivityIndicator // Thêm cái này để hiển thị loading khi đang đọc dữ liệu
+  ActivityIndicator 
 } from 'react-native';
 
-// 1. Import thư viện AsyncStorage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 if (Platform.OS === 'android') {
@@ -30,14 +29,12 @@ export default function App() {
   const [task, setTask] = useState('');
   const [taskList, setTaskList] = useState([]);
 
-  // Thêm state để kiểm tra dữ liệu đã load xong chưa
   const [isDataReady, setIsDataReady] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [editText, setEditText] = useState('');
 
-  // --- PHẦN 1: LOAD DỮ LIỆU KHI MỞ APP ---
   useEffect(() => {
     const loadTasks = async () => {
       try {
@@ -48,7 +45,6 @@ export default function App() {
       } catch (e) {
         console.error("Lỗi khi load dữ liệu:", e);
       } finally {
-        // Dù có dữ liệu hay không, cũng đánh dấu là đã load xong
         setIsDataReady(true);
       }
     };
@@ -56,9 +52,7 @@ export default function App() {
     loadTasks();
   }, []);
 
-  // --- PHẦN 2: TỰ ĐỘNG LƯU KHI LIST THAY ĐỔI ---
   useEffect(() => {
-    // Chỉ lưu khi dữ liệu đã load xong (tránh lưu đè mảng rỗng lúc mới mở app)
     if (isDataReady) {
       const saveTasks = async () => {
         try {
@@ -69,7 +63,7 @@ export default function App() {
       };
       saveTasks();
     }
-  }, [taskList, isDataReady]); // Chạy mỗi khi taskList thay đổi
+  }, [taskList, isDataReady]);
 
   const handleAddTask = () => {
     if (task.trim().length === 0) {
@@ -164,7 +158,6 @@ export default function App() {
     </View>
   );
 
-  // Nếu chưa load xong dữ liệu, hiển thị vòng xoay loading
   if (!isDataReady) {
     return (
       <View style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
@@ -260,7 +253,6 @@ export default function App() {
   );
 }
 
-// Styles giữ nguyên như cũ
 const styles = StyleSheet.create({
   container: {
     flex: 1,
