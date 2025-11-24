@@ -1,4 +1,3 @@
-// src/screens/Bai5.tsx
 import React, { useState, useRef } from 'react';
 import {
   View,
@@ -16,15 +15,13 @@ import {
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-// Giả lập Types cho Navigation nếu em chưa có file App.tsx ở đây
-// Nếu đã có thì cứ import từ file gốc nhé
+
 type RootStackParamList = {
   Bai5: undefined;
 };
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 
-// --- CẤU HÌNH ---
 interface PhotoItem {
   id: string;
   url: string;
@@ -32,13 +29,11 @@ interface PhotoItem {
 
 const MOCK_PHOTOS: PhotoItem[] = Array.from({ length: 30 }).map((_, index) => ({
   id: index.toString(),
-  // Thầy đổi size ảnh lớn hơn chút để nét hơn
   url: `https://picsum.photos/600/600?random=${index + 100}`,
 }));
 
 const COLUMN_COUNT = 3;
-const IMAGE_GAP = 4; // Khoảng cách giữa các ảnh (gap)
-// Tính toán kích thước ảnh chính xác
+const IMAGE_GAP = 4; 
 const GRID_IMAGE_SIZE = (windowWidth - (IMAGE_GAP * (COLUMN_COUNT + 1))) / COLUMN_COUNT;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Bai5'>;
@@ -48,22 +43,18 @@ const Bai5: React.FC<Props> = ({ navigation }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const modalFlatListRef = useRef<FlatList<PhotoItem>>(null);
 
-  // Hàm mở modal
   const openModal = (index: number) => {
     setSelectedImageIndex(index);
     setModalVisible(true);
   };
 
-  // Hàm cập nhật index khi lướt trong modal (để hiện số trang 1/30)
   const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
     if (viewableItems.length > 0) {
       setSelectedImageIndex(viewableItems[0].index);
     }
   }).current;
 
-  // --- RENDER GRID ITEM ---
   const renderGridItem = ({ item, index }: ListRenderItemInfo<PhotoItem>) => {
-    // Tính toán margin động để căn đều 3 cột
     const marginLeft = IMAGE_GAP;
     const marginBottom = IMAGE_GAP;
 
@@ -85,7 +76,6 @@ const Bai5: React.FC<Props> = ({ navigation }) => {
     );
   };
 
-  // --- RENDER FULL SCREEN ITEM ---
   const renderFullScreenItem = ({ item }: ListRenderItemInfo<PhotoItem>) => {
     return (
       <View style={styles.fullScreenItemContainer}>
@@ -102,7 +92,6 @@ const Bai5: React.FC<Props> = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
-      {/* --- HEADER --- */}
       <SafeAreaView style={styles.headerSafeArea}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -118,31 +107,27 @@ const Bai5: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.headerSubtitle}>{MOCK_PHOTOS.length} bức ảnh</Text>
           </View>
 
-          {/* View rỗng để cân bằng layout header */}
           <View style={styles.backButton} />
         </View>
       </SafeAreaView>
 
-      {/* --- GRID LIST --- */}
       <FlatList
         data={MOCK_PHOTOS}
         renderItem={renderGridItem}
         keyExtractor={(item) => item.id}
         numColumns={COLUMN_COUNT}
-        contentContainerStyle={{ paddingTop: IMAGE_GAP }} // Padding top cho hàng đầu tiên
+        contentContainerStyle={{ paddingTop: IMAGE_GAP }} 
         showsVerticalScrollIndicator={false}
       />
 
-      {/* --- MODAL FULL SCREEN --- */}
       <Modal
         animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
-        statusBarTranslucent={true} // Cho phép modal tràn lên status bar
+        statusBarTranslucent={true} 
       >
         <View style={styles.modalContainer}>
-          {/* Nút đóng */}
           <SafeAreaView style={styles.modalHeader}>
             <TouchableOpacity
               style={styles.closeButton}
@@ -152,7 +137,6 @@ const Bai5: React.FC<Props> = ({ navigation }) => {
             </TouchableOpacity>
           </SafeAreaView>
 
-          {/* List ảnh ngang */}
           <FlatList
             ref={modalFlatListRef}
             data={MOCK_PHOTOS}
@@ -162,7 +146,6 @@ const Bai5: React.FC<Props> = ({ navigation }) => {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
             initialScrollIndex={selectedImageIndex}
-            // Thêm sự kiện bắt index khi lướt
             onViewableItemsChanged={onViewableItemsChanged}
             viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
 
@@ -173,7 +156,6 @@ const Bai5: React.FC<Props> = ({ navigation }) => {
             })}
           />
 
-          {/* Indicator (Số trang: 5 / 30) */}
           <View style={styles.footerIndicator}>
             <Text style={styles.indicatorText}>
               {selectedImageIndex + 1} / {MOCK_PHOTOS.length}
@@ -190,9 +172,8 @@ export default Bai5;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7FA', // Màu nền sáng nhẹ hiện đại hơn trắng tinh
+    backgroundColor: '#F5F7FA', 
   },
-  // Header Styles
   headerSafeArea: {
     backgroundColor: '#fff',
     shadowColor: '#000',
@@ -219,7 +200,7 @@ const styles = StyleSheet.create({
   backButtonIcon: {
     fontSize: 40,
     color: '#2C3E50',
-    marginTop: -5, // Căn chỉnh icon mũi tên
+    marginTop: -5, 
     fontWeight: '300',
   },
   headerTitle: {
@@ -234,21 +215,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // Grid Styles
   gridItemContainer: {
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#E0E0E0', // Màu nền xám chờ ảnh load (Placeholder)
+    backgroundColor: '#E0E0E0', 
   },
   gridImage: {
     width: '100%',
     height: '100%',
   },
 
-  // Modal Styles
   modalContainer: {
     flex: 1,
-    backgroundColor: '#000', // Nền đen tuyền
+    backgroundColor: '#000', 
   },
   modalHeader: {
     position: 'absolute',
@@ -258,10 +237,9 @@ const styles = StyleSheet.create({
     zIndex: 99,
     alignItems: 'flex-end',
     paddingRight: 20,
-    paddingTop: Platform.OS === 'android' ? 40 : 10, // Fix tai thỏ cho Android
-  },
+    paddingTop: Platform.OS === 'android' ? 40 : 10, 
   closeButton: {
-    backgroundColor: 'rgba(255,255,255,0.2)', // Nền mờ trong suốt
+    backgroundColor: 'rgba(255,255,255,0.2)', 
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -284,7 +262,6 @@ const styles = StyleSheet.create({
     height: windowHeight,
   },
 
-  // Footer Indicator Style
   footerIndicator: {
     position: 'absolute',
     bottom: 40,
