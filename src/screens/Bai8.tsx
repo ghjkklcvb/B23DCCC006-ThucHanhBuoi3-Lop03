@@ -216,6 +216,8 @@ const styles = StyleSheet.create({
   listContent: {
     padding: 20,
     paddingTop: 20, 
+  },
+  
   footerLoader: {
     flexDirection: 'row',
     justifyContent: 'center',
