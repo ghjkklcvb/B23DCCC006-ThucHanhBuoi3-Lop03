@@ -19,14 +19,12 @@ export default function App() {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // 1. Kiểm tra nếu bỏ trống
     if (username.trim() === '' || password.trim() === '') {
       Alert.alert('Lỗi Đăng Nhập', 'Vui lòng nhập đầy đủ Username và Password!');
       return;
     }
 
-    // 2. Nếu hợp lệ -> Hiện popup thành công
-    // Ở đây em có thể thêm logic kiểm tra đúng sai mật khẩu sau này
+
     Alert.alert('Thông báo', 'Đăng nhập thành công! 🎉');
     Keyboard.dismiss();
   };
@@ -36,7 +34,6 @@ export default function App() {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#1e3c72" />
 
-        {/* Các hình tròn trang trí nền */}
         <View style={styles.bgCircle1} />
         <View style={styles.bgCircle2} />
         <View style={styles.bgCircle3} />
@@ -47,7 +44,6 @@ export default function App() {
 
           <View style={styles.card}>
 
-            {/* Ô nhập Username */}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Username</Text>
               <TextInput
@@ -56,11 +52,10 @@ export default function App() {
                 placeholderTextColor="#A0A0A0"
                 value={username}
                 onChangeText={setUsername}
-                autoCapitalize="none" // Không tự động viết hoa
+                autoCapitalize="none" 
               />
             </View>
 
-            {/* Ô nhập Password */}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Password</Text>
               <TextInput
@@ -69,11 +64,10 @@ export default function App() {
                 placeholderTextColor="#A0A0A0"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry={true} // Ẩn ký tự mật khẩu
+                secureTextEntry={true} 
               />
             </View>
 
-            {/* Nút Login */}
             <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
               <Text style={styles.txtLogin}>LOGIN</Text>
             </TouchableOpacity>
@@ -93,7 +87,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
   },
-  // --- Các style trang trí nền (giữ nguyên cho đẹp) ---
   bgCircle1: {
     position: 'absolute',
     width: 400,
@@ -124,7 +117,6 @@ const styles = StyleSheet.create({
     right: 30,
     opacity: 0.1,
   },
-  // --- Style nội dung chính ---
   contentContainer: {
     width: width,
     paddingHorizontal: 25,
