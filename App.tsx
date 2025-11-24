@@ -45,7 +45,6 @@ interface ExerciseItem {
   component: React.FC<any>;
 }
 
-// Dữ liệu danh sách bài tập (Đã thêm Bài 5)
 const EXERCISES: ExerciseItem[] = [
   { id: 'Bai1', title: 'Danh Sách Sinh Viên', sub: '', color: '#4834d4', component: Bai1 },
   { id: 'Bai2', title: 'Đăng Nhập', sub: '', color: '#6ab04c', component: Bai2 },
@@ -57,7 +56,6 @@ const EXERCISES: ExerciseItem[] = [
   { id: 'Bai8', title: 'Tin Tức', sub: '', color: '#30336b', component: Bai8 },
 ];
 
-// Kiểu props cho màn hình Menu
 type MenuProps = NativeStackScreenProps<RootStackParamList, 'Menu'>;
 
 const MenuScreen: React.FC<MenuProps> = ({ navigation }) => {
@@ -65,7 +63,6 @@ const MenuScreen: React.FC<MenuProps> = ({ navigation }) => {
   const renderItem: ListRenderItem<ExerciseItem> = ({ item }) => (
     <TouchableOpacity
       style={[styles.card, { backgroundColor: item.color }]}
-      // TS sẽ hiểu item.id là một route hợp lệ nhờ RootStackParamList
       onPress={() => navigation.navigate(item.id)}
       activeOpacity={0.9}
     >
@@ -99,7 +96,6 @@ const MenuScreen: React.FC<MenuProps> = ({ navigation }) => {
   );
 };
 
-// App Component chính
 const App = () => {
   return (
     <NavigationContainer>
@@ -111,7 +107,6 @@ const App = () => {
       >
         <Stack.Screen name="Menu" component={MenuScreen} />
 
-        {/* Load động các màn hình */}
         {EXERCISES.map((ex) => (
           <Stack.Screen
             key={ex.id}
