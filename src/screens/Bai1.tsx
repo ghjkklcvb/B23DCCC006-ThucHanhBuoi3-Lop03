@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,55 +8,41 @@ import {
   Alert,
   SafeAreaView,
   StatusBar,
-  Platform
+  Image
 } from 'react-native';
 
-// 1. Định nghĩa kiểu dữ liệu cho Sinh viên
-interface Student {
-  id: string;
-  name: string;
-  age: number;
-  className: string;
-  avatarColor: string;
-}
-
-// 2. Hàm random màu sắc avatar
 const getRandomColor = () => {
-  const colors = ['#e55039', '#4a69bd', '#60a3bc', '#78e08f', '#f6b93b', '#b71540', '#0c2461'];
+  const colors = ['#6c5ce7', '#00b894', '#0984e3', '#e17055', '#fdcb6e', '#e84393', '#00cec9'];
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
 export default function Bai1Screen() {
 
-  // Tạo dữ liệu giả lập 20 sinh viên
-  const students: Student[] = useMemo(() => {
-    const list: Student[] = [];
+  const students = useMemo(() => {
+    const list = [];
     const firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Đặng', 'Bùi'];
-    const middleNames = ['Văn', 'Thị', 'Đức', 'Ngọc', 'Minh', 'Hữu'];
-    const lastNames = ['An', 'Bình', 'Cường', 'Dũng', 'Giang', 'Hương', 'Khánh', 'Lan', 'Minh', 'Nam'];
+    const middleNames = ['Văn', 'Thị', 'Đức', 'Ngọc', 'Minh', 'Hữu', 'Phương'];
+    const lastNames = ['An', 'Bình', 'Cường', 'Dũng', 'Giang', 'Hương', 'Linh', 'Tâm', 'Vy'];
 
     for (let i = 1; i <= 20; i++) {
       const randomName = `${firstNames[i % firstNames.length]} ${middleNames[i % middleNames.length]} ${lastNames[i % lastNames.length]}`;
       list.push({
         id: i.toString(),
         name: randomName,
-        age: Math.floor(Math.random() * (25 - 18 + 1)) + 18, // Random tuổi 18-25
-        className: `CP173${(i % 5) + 1}`, // Random lớp
+        age: Math.floor(Math.random() * (25 - 18 + 1)) + 18,
+        className: `CP173${(i % 5) + 1}`,
         avatarColor: getRandomColor(),
       });
     }
     return list;
   }, []);
 
-  // Xử lý sự kiện nhấn vào Item -> Alert tên
-  const handlePressItem = (name: string) => {
+  const handlePressItem = (name) => {
     Alert.alert('Thông tin sinh viên', `Bạn vừa chọn sinh viên:\n${name}`);
   };
 
-  // Render từng dòng (Item)
-  const renderItem = ({ item }: { item: Student }) => {
-    // Lấy chữ cái đầu của tên để làm Avatar
-    const firstLetter = item.name.trim().split(' ').pop()?.charAt(0).toUpperCase() || '?';
+  const renderItem = ({ item }) => {
+    const firstLetter = item.name.trim().split(' ').pop().charAt(0).toUpperCase();
 
     return (
       <TouchableOpacity
@@ -64,40 +50,49 @@ export default function Bai1Screen() {
         activeOpacity={0.7}
         onPress={() => handlePressItem(item.name)}
       >
-        {/* Avatar bên trái */}
         <View style={[styles.avatar, { backgroundColor: item.avatarColor }]}>
           <Text style={styles.avatarText}>{firstLetter}</Text>
         </View>
 
-        {/* Thông tin bên phải */}
         <View style={styles.infoContainer}>
           <Text style={styles.nameText}>{item.name}</Text>
-          <View style={styles.rowDetail}>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{item.age} tuổi</Text>
+
+          <View style={styles.detailsRow}>
+            <View style={styles.classBadge}>
+              <Text style={styles.classText}>{item.className}</Text>
             </View>
-            <Text style={styles.classText}>Lớp: {item.className}</Text>
+            <View style={styles.separator} />
+            <Text style={styles.ageText}>{item.age} tuổi</Text>
           </View>
         </View>
 
-        {/* Icon mũi tên giả lập */}
-        <Text style={styles.arrowIcon}>›</Text>
+        <View style={styles.iconContainer}>
+            <Image
+                source={{uri: 'https://cdn-icons-png.flaticon.com/512/271/271228.png'}}
+                style={styles.arrowIcon}
+            />
+        </View>
       </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* StatusBar để màu nền sáng, chữ tối */}
-      <StatusBar barStyle="dark-content" backgroundColor="#f5f6fa" />
+      <StatusBar barStyle="dark-content" backgroundColor="#f8f9fd" />
 
-      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Danh Sách Lớp Học</Text>
-        <Text style={styles.headerSubtitle}>Bài tập 1: FlatList & Alert</Text>
+        <View>
+            <Text style={styles.headerTitle}>Danh Sách Lớp</Text>
+            <Text style={styles.headerSubtitle}>Tổng số: 20 sinh viên</Text>
+        </View>
+        <View style={styles.headerIconBg}>
+            <Image
+                source={{uri: 'https://cdn-icons-png.flaticon.com/512/2995/2995620.png'}}
+                style={{width: 24, height: 24, tintColor: '#4834d4'}}
+            />
+        </View>
       </View>
 
-      {/* Danh sách FlatList */}
       <FlatList
         data={students}
         renderItem={renderItem}
@@ -109,100 +104,129 @@ export default function Bai1Screen() {
   );
 }
 
-// --- Styles ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f6fa',
+    backgroundColor: '#f8f9fd',
   },
   header: {
-    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 20,
     backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ececec',
     marginBottom: 10,
-    // Shadow cho header
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 3,
+    shadowRadius: 10,
+    elevation: 5,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#2d3436',
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#7f8c8d',
+    color: '#636e72',
     marginTop: 4,
+    fontWeight: '500',
+  },
+  headerIconBg: {
+      width: 45,
+      height: 45,
+      backgroundColor: '#f1f2f6',
+      borderRadius: 12,
+      justifyContent: 'center',
+      alignItems: 'center'
   },
   listContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 40,
   },
   itemContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
     padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
+    marginBottom: 16,
+    borderRadius: 20,
     alignItems: 'center',
-    // Shadow nhẹ cho từng item
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowColor: '#6c5ce7',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 55,
+    height: 55,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   avatarText: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   infoContainer: {
     flex: 1,
+    justifyContent: 'center',
   },
   nameText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2c3e50',
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#2d3436',
     marginBottom: 6,
   },
-  rowDetail: {
+  detailsRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  badge: {
+  classBadge: {
     backgroundColor: '#ecf0f1',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 6,
-    marginRight: 10,
-  },
-  badgeText: {
-    fontSize: 12,
-    color: '#7f8c8d',
-    fontWeight: '500',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
   classText: {
+    fontSize: 12,
+    color: '#2d3436',
+    fontWeight: '600',
+  },
+  separator: {
+      width: 1,
+      height: 12,
+      backgroundColor: '#b2bec3',
+      marginHorizontal: 10
+  },
+  ageText: {
     fontSize: 13,
-    color: '#95a5a6',
+    color: '#636e72',
+    fontWeight: '500',
+  },
+  iconContainer: {
+      width: 30,
+      height: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f5f6fa',
+      borderRadius: 15
   },
   arrowIcon: {
-    fontSize: 24,
-    color: '#bdc3c7',
-    marginLeft: 10,
-    fontWeight: '300',
-    marginBottom: 4,
+      width: 12,
+      height: 12,
+      tintColor: '#a4b0be'
   },
 });
