@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingRight: 20,
     paddingTop: Platform.OS === 'android' ? 40 : 10, 
+  },
   closeButton: {
     backgroundColor: 'rgba(255,255,255,0.2)', 
     width: 36,
