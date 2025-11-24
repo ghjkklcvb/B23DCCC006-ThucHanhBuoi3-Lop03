@@ -12,7 +12,7 @@ import {
   StatusBar,
   Keyboard,
   SafeAreaView,
-  Platform, // Import thêm cái này để check hệ điều hành
+  Platform, 
 } from 'react-native';
 
 const API_URL = 'https://jsonplaceholder.typicode.com/posts';
@@ -25,7 +25,6 @@ export default function Bai8() {
   const [searchText, setSearchText] = useState('');
   const [hasMore, setHasMore] = useState(true);
 
-  // --- HÀM GỌI API ---
   const fetchArticles = async (pageNum: number, query: string = '', isRefresh: boolean = false) => {
     if (loading) return;
     setLoading(true);
@@ -61,7 +60,7 @@ export default function Bai8() {
       console.error('Lỗi:', error);
     } finally {
       setLoading(false);
-      setRefreshing(false); // Tắt icon xoay xoay khi load xong
+      setRefreshing(false); 
     }
   };
 
@@ -75,9 +74,8 @@ export default function Bai8() {
     fetchArticles(1, searchText, true);
   };
 
-  // --- XỬ LÝ KÉO ĐỂ RELOAD ---
   const handleRefresh = () => {
-    setRefreshing(true); // Bật trạng thái refresh để hiện vòng xoay
+    setRefreshing(true); 
     setPage(1);
     setSearchText('');
     fetchArticles(1, '', true);
@@ -106,7 +104,7 @@ export default function Bai8() {
   );
 
   const renderFooter = () => {
-    if (!loading) return <View style={{height: 20}} />; // Khoảng trống dưới cùng cho đẹp
+    if (!loading) return <View style={{height: 20}} />; 
     return (
       <View style={styles.footerLoader}>
         <ActivityIndicator size="large" color="#6c5ce7" />
@@ -117,13 +115,9 @@ export default function Bai8() {
 
   return (
     <View style={styles.container}>
-      {/* StatusBar: Thầy để nền trắng, icon màu đen (dark-content) cho dễ nhìn.
-        Trên Android sẽ trong suốt (translucent) để layout tràn lên trên đẹp hơn,
-        nhưng mình sẽ dùng padding để đẩy nội dung xuống.
-      */}
+
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
-      {/* HEADER & SEARCH BAR */}
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Tin Tức 24h 📰</Text>
         <View style={styles.searchBox}>
@@ -141,7 +135,6 @@ export default function Bai8() {
         </View>
       </View>
 
-      {/* FLATLIST */}
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -149,14 +142,13 @@ export default function Bai8() {
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
 
-        // --- PHẦN RELOAD Ở ĐÂY ---
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}     // Biến trạng thái
-            onRefresh={handleRefresh}   // Hàm chạy khi kéo xuống
-            colors={['#6c5ce7']}        // Màu của vòng xoay (Android)
-            tintColor="#6c5ce7"         // Màu của vòng xoay (iOS)
-            title="Đang tải lại..."     // Chữ hiện kèm (iOS)
+            refreshing={refreshing}     
+            onRefresh={handleRefresh}   
+            colors={['#6c5ce7']}        
+            tintColor="#6c5ce7"         
+            title="Đang tải lại..."   
           />
         }
 
@@ -181,15 +173,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f1f2f6',
   },
-  // --- HEADER ĐÃ SỬA ---
   headerContainer: {
     backgroundColor: '#fff',
-    // Logic: Nếu là Android thì padding top bằng chiều cao status bar + 15px
-    // Nếu là iOS thì padding 60px (đủ tránh tai thỏ)
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 30) + 20 : 60,
     paddingBottom: 15,
     paddingHorizontal: 20,
-    // Đổ bóng cho header nổi lên tách biệt với list
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -200,11 +188,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   headerTitle: {
-    fontSize: 28, // Chữ to hơn chút
+    fontSize: 28, 
     fontWeight: '800',
     color: '#2d3436',
     marginBottom: 15,
-    textAlign: 'center' // Căn giữa
+    textAlign: 'center' 
   },
   searchBox: {
     flexDirection: 'row',
@@ -225,11 +213,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 
-  // List
   listContent: {
     padding: 20,
-    paddingTop: 20, // Cách header một chút
-  },
+    paddingTop: 20, 
   footerLoader: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -241,7 +227,6 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
 
-  // Card Item Styles
   card: {
     backgroundColor: '#fff',
     borderRadius: 16,
@@ -255,7 +240,7 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: '100%',
-    height: 200, // Ảnh cao hơn chút xem cho đã mắt
+    height: 200,
     backgroundColor: '#dfe6e9',
   },
   cardBody: {
