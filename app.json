@@ -1,4 +1,8 @@
 {
   "name": "MyApp",
-  "displayName": "MyApp"
+  "displayName": "MyApp",
+  "plugins": [
+    "expo-asset",
+    "expo-font"
+  ]
 }
